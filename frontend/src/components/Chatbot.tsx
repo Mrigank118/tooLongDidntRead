@@ -295,17 +295,15 @@ const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
 };
 
 
-// Frontend function to call API
 const onSendMessage = async (message: string) => {
- try {
-   // Use POST request for the /ask-question route
-   const response = await fetch(`http://localhost:8000/ask-question/?query=${encodeURIComponent(message)}`, {
-     method: "POST",   
-     headers: {
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({ query: message }), // Sending the message in JSON
-   });
+  try {
+    const response = await fetch(`http://localhost:8000/ask-question/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query: message }), // Send query in body
+    });
 
 
    const data = await response.json();

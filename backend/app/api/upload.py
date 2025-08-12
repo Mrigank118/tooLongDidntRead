@@ -69,16 +69,20 @@ async def extract_text_from_file(file: UploadFile = File(...)):
    except Exception as e:
        raise HTTPException(status_code=400, detail=str(e))
   
+from pydantic import BaseModel
+
+class QueryModel(BaseModel):
+    query: str
+
 @router.post("/ask-question/")
-async def ask_question(query: str):
-   print(f"Received query: {query}")  # Log the query for debugging
-   if not extracted_text:
-       raise HTTPException(status_code=400, detail="No document content available. Please upload a document first.")
-  
-   answer = generate_answer_from_openai(query, extracted_text)
-   return {"answer": answer}
-
-
+async def ask_question(data: QueryModel):
+    query = data.query  # Access query from the request body
+    print(f"Received query: {query}")  # Log the query for debugging
+    if not extracted_text:
+        raise HTTPException(status_code=400, detail="No document content available. Please upload a document first.")
+    
+    answer = generate_answer_from_openai(query, extracted_text)
+    return {"answer": answer}
 
 
 def generate_answer_from_openai(query: str, context: str) -> str:
