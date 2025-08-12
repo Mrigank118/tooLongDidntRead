@@ -1,16 +1,19 @@
 import React from 'react';
 import DocumentProcessor from './DocumentProcessor';
+import { useTranslation } from 'react-i18next';
 
 const DashboardPreview = () => {
+  const { t } = useTranslation();
+
   return (
     <section id="dashboard" className="w-full py-12 md:py-16 px-6 md:px-12 bg-background">
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="text-center space-y-3 max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tighter">
-            Experience TLDR in Action
+            {t("dashboard.title")}
           </h2>
           <p className="text-muted-foreground text-lg">
-            Upload your insurance document and see how our AI transforms complex terms into clear insights
+            {t("dashboard.description")}
           </p>
         </div>
         

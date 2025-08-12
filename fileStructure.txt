@@ -1,0 +1,78 @@
+.
+├── backend
+│   └── app
+│       ├── api
+│       │   ├── filteration.py
+│       │   ├── highlight.py
+│       │   ├── summarize.py
+│       │   └── upload.py
+│       ├── __init__.py
+│       ├── main.py
+│       └── services
+│           ├── clause_detector.py
+│           └── text_extractor.py
+├── file_structure.txt
+├── fileStructure.txt
+├── frontend
+│   ├── bun.lockb
+│   ├── components.json
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── images
+│   │   │   ├── mrigank_icon.jpg
+│   │   │   ├── narendra_icon.jpg
+│   │   │   └── ritika_icon.jpg
+│   │   ├── placeholder.svg
+│   │   └── robots.txt
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.tsx
+│   │   ├── components
+│   │   │   ├── Chatbot.tsx
+│   │   │   ├── DashboardPreview.tsx
+│   │   │   ├── DocumentProcessor.tsx
+│   │   │   ├── Features.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── HeroSection.tsx
+│   │   │   ├── Logo.tsx
+│   │   │   ├── Pricing.tsx
+│   │   │   ├── TaskBoard.tsx
+│   │   │   ├── TaskCard.tsx
+│   │   │   ├── TaskColumn.tsx
+│   │   │   ├── Testimonials.tsx
+│   │   │   └── ui
+│   │   ├── hooks
+│   │   │   ├── use-mobile.tsx
+│   │   │   └── use-toast.ts
+│   │   ├── index.css
+│   │   ├── lib
+│   │   │   └── utils.ts
+│   │   ├── main.tsx
+│   │   ├── pages
+│   │   │   ├── Index.tsx
+│   │   │   └── NotFound.tsx
+│   │   └── vite-env.d.ts
+│   ├── tailwind.config.ts
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
+├── LICENSE
+├── models
+│   ├── dataset
+│   │   └── clauses.csv
+│   ├── inference.py
+│   └── train.py
+├── package.json
+├── package-lock.json
+├── README.md
+└── requirements.txt
+
+16 directories, 60 files

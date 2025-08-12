@@ -1,18 +1,21 @@
+// frontend/src/components/Header.tsx
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Logo from './Logo';
-import { Menu, X, CircleDot, LayoutDashboard, Users, Sun, Moon } from 'lucide-react'; // Import Users icon
+import { Menu, X, CircleDot, LayoutDashboard, Users, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Switch } from '@/components/ui/switch';
+import { useTranslation } from 'react-i18next';
+import LanguageToggle from './LanguageToggle';
 
 const Header = () => {
+  const { t } = useTranslation();
   const [activePage, setActivePage] = useState('features');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true); // Default to light mode
-  
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
   useEffect(() => {
-    // Apply the theme to the document when it changes
     if (isDarkMode) {
       document.documentElement.classList.remove('light-mode');
       document.documentElement.classList.add('dark-mode');
@@ -21,7 +24,7 @@ const Header = () => {
       document.documentElement.classList.add('light-mode');
     }
   }, [isDarkMode]);
-  
+
   const handleNavClick = (page: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     setActivePage(page);
@@ -46,20 +49,19 @@ const Header = () => {
         <div className="p-3">
           <Logo />
         </div>
-        
-        {/* Mobile menu button */}
-        <button 
+
+        <button
           className="md:hidden p-3 rounded-2xl text-muted-foreground hover:text-foreground"
           onClick={toggleMobileMenu}
+          aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        
-        {/* Desktop navigation */}
+
         <nav className="hidden md:flex items-center absolute left-1/2 transform -translate-x-1/2">
           <div className="rounded-full px-1 py-1 backdrop-blur-md bg-background/80 border border-border shadow-lg">
             <ToggleGroup type="single" value={activePage} onValueChange={(value) => value && setActivePage(value)}>
-              <ToggleGroupItem 
+              <ToggleGroupItem
                 value="features"
                 className={cn(
                   "px-4 py-2 rounded-full transition-colors relative",
@@ -67,93 +69,97 @@ const Header = () => {
                 )}
                 onClick={handleNavClick('features')}
               >
-                <CircleDot size={16} className="inline-block mr-1.5" /> Features
+                <CircleDot size={16} className="inline-block mr-1.5" /> {t('nav.features')}
               </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="dashboard" 
+              <ToggleGroupItem
+                value="dashboard"
                 className={cn(
                   "px-4 py-2 rounded-full transition-colors relative",
                   activePage === 'dashboard' ? 'text-accent-foreground bg-accent' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 )}
                 onClick={handleNavClick('dashboard')}
               >
-                <LayoutDashboard size={16} className="inline-block mr-1.5" /> Platform
+                <LayoutDashboard size={16} className="inline-block mr-1.5" /> {t('nav.platform')}
               </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="pricing" 
+              <ToggleGroupItem
+                value="pricing"
                 className={cn(
                   "px-4 py-2 rounded-full transition-colors relative",
                   activePage === 'pricing' ? 'text-accent-foreground bg-accent' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 )}
                 onClick={handleNavClick('pricing')}
               >
-                <Users size={16} className="inline-block mr-1.5" /> Team {/* Replaced DollarSign with Users */}
+                <Users size={16} className="inline-block mr-1.5" /> {t('nav.team')}
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
         </nav>
-        
-        {/* Mobile navigation */}
+
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-20 left-4 right-4 bg-background/95 backdrop-blur-md py-4 px-6 border border-border rounded-2xl shadow-lg z-50">
             <div className="flex flex-col gap-4">
-              <a 
-                href="#features" 
+              <a
+                href="#features"
                 className={`px-3 py-2 text-sm rounded-md transition-colors ${
                   activePage === 'features' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
                 onClick={handleNavClick('features')}
               >
-                <CircleDot size={16} className="inline-block mr-1.5" /> Features
+                <CircleDot size={16} className="inline-block mr-1.5" /> {t('nav.features')}
               </a>
-              <a 
-                href="#dashboard" 
+              <a
+                href="#dashboard"
                 className={`px-3 py-2 text-sm rounded-md transition-colors ${
                   activePage === 'dashboard' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
                 onClick={handleNavClick('dashboard')}
               >
-                <LayoutDashboard size={16} className="inline-block mr-1.5" /> Team
+                <LayoutDashboard size={16} className="inline-block mr-1.5" /> {t('nav.platform')}
               </a>
-              <a 
-                href="#testimonials" 
+              <a
+                href="#testimonials"
                 className={`px-3 py-2 text-sm rounded-md transition-colors ${
                   activePage === 'pricing' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
                 onClick={handleNavClick('testimonials')}
               >
-                <Users size={16} className="inline-block mr-1.5" /> Pricing {/* Replaced DollarSign with Users */}
+                <Users size={16} className="inline-block mr-1.5" /> {t('nav.pricing')}
               </a>
-              
-              {/* Add theme toggle for mobile */}
+
               <div className="flex items-center justify-between px-3 py-2">
-                <span className="text-sm text-muted-foreground">Theme</span>
+                <span className="text-sm text-muted-foreground">{t('theme.label')}</span>
                 <div className="flex items-center gap-2">
                   <Moon size={16} className={`${isDarkMode ? 'text-primary' : 'text-muted-foreground'}`} />
-                  <Switch 
-                    checked={!isDarkMode} 
-                    onCheckedChange={toggleTheme} 
+                  <Switch
+                    checked={!isDarkMode}
+                    onCheckedChange={toggleTheme}
                     className="data-[state=checked]:bg-primary"
                   />
                   <Sun size={16} className={`${!isDarkMode ? 'text-primary' : 'text-muted-foreground'}`} />
                 </div>
               </div>
+
+              {/* Mobile language toggle */}
+              <div className="px-3">
+                <LanguageToggle />
+              </div>
             </div>
           </div>
         )}
-        
+
         <div className="hidden md:flex items-center gap-4">
-          {/* Theme toggle for desktop */}
           <div className="flex items-center gap-2 rounded-full px-3 py-2">
             <Moon size={18} className={`${isDarkMode ? 'text-primary' : 'text-muted-foreground'}`} />
-            <Switch 
-              checked={!isDarkMode} 
-              onCheckedChange={toggleTheme} 
+            <Switch
+              checked={!isDarkMode}
+              onCheckedChange={toggleTheme}
               className="data-[state=checked]:bg-primary"
             />
             <Sun size={18} className={`${!isDarkMode ? 'text-primary' : 'text-muted-foreground'}`} />
           </div>
-          
+
+          {/* Desktop language toggle */}
+          <LanguageToggle />
         </div>
       </header>
     </div>

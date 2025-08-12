@@ -1,0 +1,26 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+env/
+venv/
+*.env
+*.env.*
+*.log
+
+# Vite / Node.js
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+backend/temp/

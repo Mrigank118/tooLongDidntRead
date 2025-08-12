@@ -1,60 +1,51 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, Layers, Grid3x3, ListCheck, BookOpen, Star, LayoutDashboard } from "lucide-react";
 
 const Features = () => {
+  
   const [openFeature, setOpenFeature] = useState<number | null>(null);
+  const { t } = useTranslation(); 
+ const features = [
+  {
+    titleKey: 'featuresSection.featuresList.0.title',
+    descriptionKey: 'featuresSection.featuresList.0.description',
+    expandedDescriptionKey: 'featuresSection.featuresList.0.expandedDescription',
+    icon: <BookOpen size={24} className="text-white" />,
+  },
+  {
+    titleKey: 'featuresSection.featuresList.1.title',
+    descriptionKey: 'featuresSection.featuresList.1.description',
+    expandedDescriptionKey: 'featuresSection.featuresList.1.expandedDescription',
+    icon: <Layers size={24} className="text-white" />,
+  },
+  {
+    titleKey: 'featuresSection.featuresList.2.title',
+    descriptionKey: 'featuresSection.featuresList.2.description',
+    expandedDescriptionKey: 'featuresSection.featuresList.2.expandedDescription',
+    icon: <LayoutDashboard size={24} className="text-white" />,
+  },
+  {
+    titleKey: 'featuresSection.featuresList.3.title',
+    descriptionKey: 'featuresSection.featuresList.3.description',
+    expandedDescriptionKey: 'featuresSection.featuresList.3.expandedDescription',
+    icon: <ListCheck size={24} className="text-white" />,
+  },
+  {
+    titleKey: 'featuresSection.featuresList.4.title',
+    descriptionKey: 'featuresSection.featuresList.4.description',
+    expandedDescriptionKey: 'featuresSection.featuresList.4.expandedDescription',
+    icon: <Star size={24} className="text-white" />,
+  },
+  {
+    titleKey: 'featuresSection.featuresList.5.title',
+    descriptionKey: 'featuresSection.featuresList.5.description',
+    expandedDescriptionKey: 'featuresSection.featuresList.5.expandedDescription',
+    icon: <Grid3x3 size={24} className="text-white" />,
+  }
+];
 
-  const features = [
-    {
-      title: "AI Document Analysis",
-      description: "Upload insurance policies and get instant AI-powered analysis and summaries.",
-      expandedDescription: "Our advanced AI processes complex insurance documents in seconds, extracting key information and creating easy-to-understand summaries. Upload PDFs, DOCs, or text files and get comprehensive analysis including coverage details, exclusions, and important terms.",
-      icon: (
-        <BookOpen size={24} className="text-white" />
-      )
-    },
-    {
-      title: "Risk Clause Detection",
-      description: "Automatically identify and highlight high-risk clauses in your insurance policies.",
-      expandedDescription: "TLDR scans your documents for potentially problematic clauses, categorizing them by risk level. High-risk clauses are highlighted in red, moderate-risk in orange, with detailed explanations of why each clause matters to you personally.",
-      icon: (
-        <Layers size={24} className="text-white" />
-      )
-    },
-    {
-      title: "Interactive AI Chatbot",
-      description: "Ask specific questions about your policy and get instant, accurate answers.",
-      expandedDescription: "Chat with TLDR about your uploaded documents. Ask questions like 'Does this cover cancer treatments?' or 'What's my deductible?' and get clear, contextual answers based on your specific policy terms.",
-      icon: (
-        <LayoutDashboard size={24} className="text-white" />
-      )
-    },
-    {
-      title: "Executive Summaries",
-      description: "Transform dense legal language into clear, digestible summaries.",
-      expandedDescription: "Never struggle with complex insurance jargon again. Our AI creates concise executive summaries that highlight key benefits, coverage limits, deductibles, and important policy details in plain English.",
-      icon: (
-        <ListCheck size={24} className="text-white" />
-      )
-    },
-    {
-      title: "Downloadable Reports",
-      description: "Generate comprehensive risk analysis reports for your records.",
-      expandedDescription: "Download detailed PDF reports containing your policy summary, highlighted clauses, risk assessments, and explanations. Perfect for sharing with family members, financial advisors, or keeping for your records.",
-      icon: (
-        <Star size={24} className="text-white" />
-      )
-    },
-    {
-      title: "Multi-Format Support",
-      description: "Upload documents in various formats including PDF, DOC, and TXT files.",
-      expandedDescription: "TLDR supports all major document formats. Whether your insurance policy is a PDF from your provider, a Word document, or plain text, our platform can analyze it and provide comprehensive insights.",
-      icon: (
-        <Grid3x3 size={24} className="text-white" />
-      )
-    }
-  ];
 
   const toggleFeature = (index: number) => {
     setOpenFeature(openFeature === index ? null : index);
@@ -65,11 +56,10 @@ const Features = () => {
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center space-y-3 max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tighter">
-            Powerful Features for Insurance Clarity
+             {t('featuresSection.title')}
           </h2>
           <p className="text-cosmic-muted text-lg">
-            Advanced AI tools to help you understand insurance policies quickly and make informed decisions
-          </p>
+            {t('featuresSection.subtitle')}          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -91,15 +81,15 @@ const Features = () => {
                     }`}
                   />
                 </div>
-                <h3 className="text-xl font-medium tracking-tighter mb-3">{feature.title}</h3>
-                <p className="text-cosmic-muted">{feature.description}</p>
+                <h3 className="text-xl font-medium tracking-tighter mb-3">{t(feature.titleKey)}</h3>
+                <p className="text-cosmic-muted">{t(feature.descriptionKey)}</p>
               </CollapsibleTrigger>
               <CollapsibleContent className="px-6 pb-6 pt-2">
                 <div className="pt-3 border-t border-cosmic-light/10">
-                  <p className="text-cosmic-muted">{feature.expandedDescription}</p>
+                  <p className="text-cosmic-muted">{t(feature.expandedDescriptionKey)}</p>
                   <div className="mt-4 flex justify-end">
                     <button className="text-cosmic-accent hover:text-cosmic-accent/80 text-sm font-medium">
-                      Learn more →
+                      {t('featuresSection.learnMore')}
                     </button>
                   </div>
                 </div>
