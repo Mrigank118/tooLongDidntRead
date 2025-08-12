@@ -1,8 +1,6 @@
-# backend/app/main.py
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.api import upload  # Import the upload API
+from backend.app.api import upload, askQuestion  # Correct import for the askQuestion file
 
 app = FastAPI()
 
@@ -17,3 +15,6 @@ app.add_middleware(
 
 # Register the upload API
 app.include_router(upload.router)  # This will include the routes defined in `upload.py`
+
+# Register the askQuestion API (your ask-question route)
+app.include_router(askQuestion.router)  # This will include the routes defined in `askQuestion.py`
