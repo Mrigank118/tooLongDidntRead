@@ -1,20 +1,16 @@
-Here's an improved version of your README with added collaborator tiles and a more structured presentation of the tech stack:
+Here's an updated version of your README with all the tech stack icons styled using badges:
 
 ---
 
 # TLDR — Insurance T\&Cs Vulnerability Highlighter & Summarizer
 
-**TLDR** (Too Long; Didn’t Read) is an AI tool that simplifies **Insurance Terms & Conditions** by:
-
-* Summarizing key points.
-* Highlighting vulnerable clauses (Exclusions, Waiting Periods, etc.).
-* Allowing users to ask questions in plain language.
+**TLDR** simplifies insurance policies by summarizing key points, highlighting risky clauses, and answering user questions. Upload a PDF, and get an AI-generated summary, highlighted risks, and a downloadable report—making complex terms easy to understand.
 
 ---
 
 ## Problem
 
-Insurance policies often bury critical clauses in lengthy documents. Users tend to skip reading these, leading to rejected claims and financial loss.
+Insurance policies often hide critical clauses in lengthy documents. Users skip reading them, leading to rejected claims and financial loss.
 
 ---
 
@@ -32,31 +28,48 @@ Insurance policies often bury critical clauses in lengthy documents. Users tend 
 
 ### **Data Collection**
 
+![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-14354C?style=for-the-badge\&logo=python\&logoColor=white)
+![pdfplumber](https://img.shields.io/badge/pdfplumber-000000?style=for-the-badge\&logo=python\&logoColor=white)
+![PyMuPDF](https://img.shields.io/badge/PyMuPDF-8E8E8E?style=for-the-badge\&logo=python\&logoColor=white)
+
 * **BeautifulSoup**: Used for scraping and extracting clauses from various sources.
 * **pdfplumber**: Extracts text from PDFs with high accuracy.
 * **fitz** (PyMuPDF): Parses and extracts data from PDF files for clause analysis.
 
 ### **AI Model**
 
+![LegalBERT](https://img.shields.io/badge/LegalBERT-%2320232a.svg?style=for-the-badge\&logo=python\&logoColor=white)
+
 * **Fine-tuned LegalBERT**: A custom BERT model fine-tuned on insurance-related datasets for understanding and classifying legal language.
 * **Risk Scoring Engine**: Python-based engine that scores clauses for risk (e.g., exclusions, waiting periods).
 
 ### **Chatbot**
 
+![OpenAI](https://img.shields.io/badge/OpenAI-4B8B1B?style=for-the-badge\&logo=openai\&logoColor=white)
+
 * **OpenAI API**: Powers the semantic search for clause-based Q\&A to answer user questions with contextual accuracy.
 
 ### **Backend**
+
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge\&logo=fastapi\&logoColor=white)
+![Uvicorn](https://img.shields.io/badge/Uvicorn-7D6B68?style=for-the-badge\&logo=python\&logoColor=white)
 
 * **FastAPI**: Fast and modern Python web framework for building APIs.
 * **Uvicorn**: ASGI server for running FastAPI applications at high speed.
 
 ### **Frontend**
 
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge\&logo=react\&logoColor=%2361DAFB)
+![Vite](https://img.shields.io/badge/Vite-%230a0a0a?style=for-the-badge\&logo=vite\&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-%2339B0B2?style=for-the-badge\&logo=tailwindcss\&logoColor=white)
+
 * **React**: JavaScript framework for building interactive UIs.
 * **Vite**: Fast build tool for modern web apps.
 * **Tailwind CSS**: Utility-first CSS framework for custom, responsive designs.
 
 ### **Reports**
+
+![ReportLab](https://img.shields.io/badge/ReportLab-0A0A0A?style=for-the-badge\&logo=python\&logoColor=white)
 
 * **ReportLab**: Used for generating downloadable, color-coded PDF reports summarizing the analysis.
 
@@ -79,7 +92,8 @@ Insurance policies often bury critical clauses in lengthy documents. Users tend 
 ### Backend Setup (FastAPI)
 
 
-1. From the Root Directory Create a Python virtual environment:
+
+1. From the Root, Create a Python virtual environment:
 
    ```bash
    python -m venv venv
@@ -124,7 +138,17 @@ Insurance policies often bury critical clauses in lengthy documents. Users tend 
 ## Collaborators
 
 
-* **[@jainritikaa](https://github.com/jainritikaa)**
-* **[@Narendersing007](https://github.com/Narendersing007)**
-* **[@Mrigank118](https://github.com/Mrigank118)**
 
+* **[@jainritikaa](https://github.com/jainritikaa)**
+ 
+  ![GitHub](https://img.shields.io/badge/GitHub-jainritikaa-181717?style=for-the-badge\&logo=github\&logoColor=white)
+
+* **[@Narendersing007](https://github.com/Narendersing007)**
+  
+  ![GitHub](https://img.shields.io/badge/GitHub-Narendersing007-181717?style=for-the-badge\&logo=github\&logoColor=white)
+
+* **[@Mrigank118](https://github.com/Mrigank118)**
+  
+  ![GitHub](https://img.shields.io/badge/GitHub-Mrigank118-181717?style=for-the-badge\&logo=github\&logoColor=white)
+
+---
