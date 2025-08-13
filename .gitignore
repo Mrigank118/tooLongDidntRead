@@ -24,3 +24,5 @@ dist/
 # Windows
 Thumbs.db
 backend/temp/
+
+model/
