@@ -1,23 +1,11 @@
 import csv
 import os
 import re
+import ast
 
-# Path to dataset
-DATASET_PATH = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),  # /backend/app/api
-        "..", "..", "..",           # go up to project root
-        "models", "dataset", "Updated_CombinedDataset.csv"
-    )
-)
-
-print("Looking for dataset at:", DATASET_PATH)
-print("Exists?", os.path.exists(DATASET_PATH))
+DATASET_PATH = "/home/ritikajain/Downloads/tooLongDidntRead/models/dataset/Updated_CombinedDataset.csv"
 
 def load_dataset_keywords():
-    """
-    Load 'Key Terms' from the dataset as lowercase keywords for matching.
-    """
     keywords = set()
     if not os.path.exists(DATASET_PATH):
         print(f"❌ Dataset not found at {DATASET_PATH}")
@@ -27,42 +15,46 @@ def load_dataset_keywords():
         with open(DATASET_PATH, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                if row.get("Key_Terms"):
-                    for term in row["Key_Terms"].split(","):
-                        term = term.strip().lower()
-                        if term:
-                            keywords.add(term)
+                key_terms_str = row.get("Key_Terms", "")
+                if key_terms_str:
+                    try:
+                        terms = ast.literal_eval(key_terms_str)
+                        for term in terms:
+                            term = term.strip().lower()
+                            if term:
+                                keywords.add(term)
+                    except Exception:
+                        for term in key_terms_str.split(","):
+                            term = term.strip().lower()
+                            if term:
+                                keywords.add(term)
     except Exception as e:
         print(f"⚠️ Error reading dataset: {e}")
     return keywords
 
-# Preload keywords once at import time
 KEYWORDS = load_dataset_keywords()
-print(f"✅ Loaded {len(KEYWORDS)} keywords from dataset.")
 
 def normalize_text(text):
-    """Lowercase and remove extra spaces/punctuation for better matching."""
     return re.sub(r"[^\w\s]", "", text.lower()).strip()
 
-# Blacklist common boilerplate/header/footer phrases to exclude
 BLACKLIST_PHRASES = [
     "please read carefully to understand your rights",
     "the clause is classified as",
     "based on legalbert analysis",
     "please read carefully to understand your rights, coverage, and obligations",
-    # Add any other common unwanted phrases here
 ]
 
 def is_blacklisted(text: str) -> bool:
-    lowered = text.lower()
+    lowered = normalize_text(text)
     return any(phrase in lowered for phrase in BLACKLIST_PHRASES)
 
+def contains_keyword(text, keywords):
+    for kw in keywords:
+        if re.search(r'\b' + re.escape(kw) + r'\b', text):
+            return True
+    return False
+
 def filter_clauses(extracted_text: str, min_length: int = 5):
-    """
-    Filters clauses from extracted PDF text using dataset keywords,
-    excludes blacklisted boilerplate sentences,
-    and enforces minimum length.
-    """
     if not extracted_text.strip():
         print("⚠️ No extracted text provided.")
         return []
@@ -71,7 +63,6 @@ def filter_clauses(extracted_text: str, min_length: int = 5):
     lines = extracted_text.split("\n")
 
     for line in lines:
-        # Skip blacklisted phrases early
         if is_blacklisted(line):
             continue
 
@@ -79,11 +70,8 @@ def filter_clauses(extracted_text: str, min_length: int = 5):
         if len(clean_line.split()) < min_length:
             continue
 
-        # Match against dataset keywords
-        for keyword in KEYWORDS:
-            if keyword in clean_line:
-                relevant_clauses.append(line.strip())
-                break
+        if contains_keyword(clean_line, KEYWORDS):
+            relevant_clauses.append(line.strip())
 
     # Remove duplicates while preserving order
     seen = set()
@@ -96,5 +84,5 @@ def filter_clauses(extracted_text: str, min_length: int = 5):
     return filtered
 
 def filter_by_coverage(clauses):
-    """Special filter for coverage-related clauses."""
+    """Filter clauses that mention 'coverage'."""
     return [clause for clause in clauses if "coverage" in clause.lower()]
