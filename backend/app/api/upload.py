@@ -13,6 +13,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 router = APIRouter()
 extracted_text = ""  # global
+UPLOAD_FOLDER = './uploads/'
 
 # Temporary definition if not already in filteration.py
 def filter_by_length(clauses, min_length=5):

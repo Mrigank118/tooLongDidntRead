@@ -30,6 +30,14 @@ const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
 
+  // Helper to clean markdown bold ** and italics * and bullets * from assistant's response
+  const cleanMarkdown = (mdText: string) => {
+    return mdText
+      .replace(/\*\*/g, '')  // remove bold **
+      .replace(/\*/g, '')    // remove italics and bullets *
+      .trim();
+  };
+
   const startListening = () => {
     if (!recognition) {
       alert("Speech Recognition API not supported in this browser.");
@@ -76,9 +84,13 @@ const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
 
     try {
       const assistantMessageContent = await onSendMessage(userMessage.content);
+      
+      // Clean the markdown from the assistant's reply here
+      const cleanedContent = cleanMarkdown(assistantMessageContent);
+
       const assistantMessage: Message = {
         role: 'assistant',
-        content: assistantMessageContent,
+        content: cleanedContent,
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, assistantMessage]);

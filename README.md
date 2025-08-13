@@ -152,3 +152,85 @@ Insurance policies often hide critical clauses in lengthy documents. Users skip 
   ![GitHub](https://img.shields.io/badge/GitHub-Mrigank118-181717?style=for-the-badge\&logo=github\&logoColor=white)
 
 ---
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+import os
+from google import genai  # Import the Gemini client
+
+class AskRequest(BaseModel):
+    query: str
+
+router = APIRouter()
+
+EXTRACTED_TEXT_PATH = "extracted_text.txt"
+MAX_CONTEXT_CHARS = 200_000  # Trim huge files to avoid token limits
+
+GEMINI_API_KEY = "AIzaSyBDjYvJUqnUeLWoa7KPyZAvHANwqGZqdgo"  # Replace with your actual API key
+
+@router.post("/ask-question/")
+async def ask_question(payload: AskRequest):
+    query = (payload.query or "").strip()
+    if not query:
+        raise HTTPException(status_code=422, detail="Query cannot be empty.")
+
+    if not os.path.exists(EXTRACTED_TEXT_PATH):
+        raise HTTPException(status_code=404, detail="Extracted text file not found. Please upload a file first.")
+
+    try:
+        with open(EXTRACTED_TEXT_PATH, "r", encoding="utf-8", errors="ignore") as f:
+            context = f.read()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read context: {e}")
+
+    if not context.strip():
+        raise HTTPException(status_code=400, detail="Extracted text is empty. Please re-upload a valid document.")
+
+    if len(context) > MAX_CONTEXT_CHARS:
+        context = context[:MAX_CONTEXT_CHARS]
+    try:
+        if query.lower() == "summarize":
+            prompt = f"""
+            Task:
+            Please break down the insurance policy into a comprehensive table that highlights all essential details (including hidden clauses and fine print) that may not be explicitly emphasized on comparison websites or by the insurance company.
+
+            Columns:
+            - Category: A brief name for the aspect of the policy (e.g., Premium, Waiting Period, Co-payment Clause)
+            - Details: Clear description of coverage, terms, or hidden clauses
+
+            Include:
+            - Basic Policy Information
+            - Coverage Details
+            - Waiting Periods
+            - Premium Details
+            - Exclusions and Hidden Clauses
+            - Restoration and Cumulative Benefits
+            - Non-Network Hospitals
+            - Maternity and Newborn Coverage
+            - Co-payment & Sub-limits
+            - Critical Illness Coverage
+            - Additional Features
+            - Transparency Gaps
+
+            Output: Table format, concise but specific, highlighting all important terms, waiting periods, exclusions, and hidden clauses.
+
+            Context:
+            {context}
+            """
+        else:
+            prompt = (
+                f"Answer the question directly using the provided context. "
+                f"Question: {query}\n\n"
+                f"Context:\n{context}"
+            )
+
+        result = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+
+        answer = getattr(result, "text", None) or "Sorry, I couldn't generate a response."
+
+        return {"answer": answer}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gemini error: {e}")
