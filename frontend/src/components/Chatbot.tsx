@@ -15,6 +15,9 @@ interface ChatbotProps {
   onSendMessage: (message: string) => Promise<string>;
 }
 
+const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+
 const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -25,14 +28,43 @@ const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
   ]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  const startListening = () => {
+    if (!recognition) {
+      alert("Speech Recognition API not supported in this browser.");
+      return;
+    }
+
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+    setIsListening(true);
+
+    recognition.onresult = (event: any) => {
+      const speechResult = event.results[0][0].transcript;
+      setCurrentMessage(speechResult);
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error', event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+  };
 
   const handleSendMessage = async () => {
     if (!currentMessage.trim()) {
-      console.error("Message is empty!");  // Prevent sending empty messages
-      return;  // Prevent sending an empty message
+      console.error("Message is empty!");
+      return;
     }
 
-    // Add the user's message to the chat window
     const userMessage: Message = {
       role: 'user',
       content: currentMessage,
@@ -43,14 +75,12 @@ const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
     setIsTyping(true);
 
     try {
-      // Send the current message (query) to the backend and get the assistant's response
-      const assistantMessageContent = await onSendMessage(currentMessage);
+      const assistantMessageContent = await onSendMessage(userMessage.content);
       const assistantMessage: Message = {
         role: 'assistant',
         content: assistantMessageContent,
         timestamp: new Date(),
       };
-      // Add assistant's response to the chat window
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -130,6 +160,28 @@ const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
           onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
           className="flex-1"
         />
+
+        <Button
+          onClick={startListening}
+          disabled={isListening || isTyping}
+          size="icon"
+          title={isListening ? "Listening..." : "Speak your question"}
+        >
+          {isListening ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1v11m0 0a3 3 0 01-3-3v0a3 3 0 016 0v0a3 3 0 01-3 3zM19 11v0a7 7 0 01-14 0v0" />
+            </svg>
+          )}
+        </Button>
+
         <Button
           onClick={handleSendMessage}
           disabled={!currentMessage.trim() || isTyping}
@@ -141,6 +193,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onSendMessage }) => {
     </div>
   );
 };
+
 
 // Function to send the query to the backend API (ask-question endpoint)
 const onSendMessage = async (message: string) => {
