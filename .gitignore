@@ -25,4 +25,4 @@ dist/
 Thumbs.db
 backend/temp/
 
-models/
+models/models/legalbert_clause_classifier/model.safetensors
